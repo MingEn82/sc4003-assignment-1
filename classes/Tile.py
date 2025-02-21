@@ -1,23 +1,30 @@
-from enum import Enum
-
-class Direction(Enum):
-    LEFT = (-1, 0)
-    RIGHT = (1, 0)
-    UP = (0, -1)
-    DOWN = (0, 1)
+from classes.Direction import Left
 
 class Square:
-    def __init__(self, reward=-0.05):
+    def __init__(self, reward=-0.05, action=Left()):
         self.reward = float(reward)
-        self.value = 0
-        self.best_action = Direction.LEFT
+        self.value = 0.0
+        self._prev_value = self.value
+        self.action = action
+
+    def display_reward(self):
+        return f"|{str(self.reward):^7.7}|"
     
-    def display(self):
-        return f"|{self.reward:5.5}|"
+    def display_value(self):
+        return f"|{str(self.value):^7.7}|"
+    
+    def display_direction(self):
+        return f"|  {self.action.icon}  |"
 
 class Wall:
     def __init__(self):
         self.value = 0
+
+    def display_reward(self):
+        return "|   x   |"
     
-    def display(self):
-        return f"|xxxxx|"
+    def display_value(self):
+        return "|   x   |"
+
+    def display_direction(self):
+        return "|  x  |"

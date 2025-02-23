@@ -6,6 +6,7 @@ class Direction:
     def __str__(self):
         return self.icon
     
+    
 class Left(Direction):
     def __init__(self):
         super().__init__(vector=(-1, 0), icon="←")
@@ -20,7 +21,7 @@ class Up(Direction):
 
 class Down(Direction):
     def __init__(self):
-        super().__init__(vector=(0, -1), icon="↓")
+        super().__init__(vector=(0, 1), icon="↓")
 
 def rotate_clockwise(direction:Direction):
     if type(direction) is Left:

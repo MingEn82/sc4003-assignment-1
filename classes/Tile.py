@@ -4,7 +4,7 @@ class Square:
     def __init__(self, reward=-0.05, action=Left()):
         self.reward = float(reward)
         self.value = 0.0
-        self._prev_value = self.value
+        self.prev_value = self.value
         self.action = action
 
     def display_reward(self):

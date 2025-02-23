@@ -13,6 +13,5 @@ if __name__ == "__main__":
             [Square(), Square(), Square(), Square(), Square(), Square()]
         ]
     )
-    maze.display()
     solver = PolicyIteration(maze, discount=0.99)
     solver.solve()

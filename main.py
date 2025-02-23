@@ -21,7 +21,14 @@ if __name__ == "__main__":
         ]
     )
     solver = PolicyIteration(maze, discount=0.99)
-    solver.solve(log_every_step=False)
+    solver.solve(log_every_step=False, plot_values=True)
 
+    maze = Maze(
+        [
+            [Square(0), Square(0), Square(0), Square(1),],
+            [Square(0), Wall(), Square(0), Square(-1),],
+            [Square(0), Square(0), Square(0), Square(0),],
+        ]
+    )
     solver = ValueIteration(maze, discount=0.99)
-    solver.solve(log_every_step=False)
+    solver.solve(log_every_step=False, plot_values=True)

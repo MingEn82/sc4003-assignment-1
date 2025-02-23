@@ -3,27 +3,27 @@ from classes.Tile import Wall
 from classes.Direction import (
     rotate_anticlockwise, rotate_clockwise, Left
 )
+from classes.Plotter import Plotter
 
 class Solver:
     def __init__(self, maze:Maze, discount):
         self.maze = maze
         self.discount = discount
-        self.m = len(self.maze.layout)
-        self.n = len(self.maze.layout[0])
+        self.plotter = Plotter()
     
     def _agent_will_move(self, i, j, di, dj):
         '''
         Returns true if the action will move agent to a square
         Returns false if the action will move agent out of bounds or into a wall
         ''' 
-        return 0 <= i + di < self.m and 0 <= j + dj < self.n and not isinstance(self.maze.layout[i+di][j+dj], Wall)
+        return 0 <= i + di < self.maze.height and 0 <= j + dj < self.maze.width and not isinstance(self.maze.layout[i+di][j+dj], Wall)
     
     def _get_valid_actions(self, i, j):
         actions = []
         action = Left()
         for _ in range(4):
             di, dj = action.vector
-            if 0 <= i + di < self.m and 0 <= j + dj < self.n:
+            if 0 <= i + di < self.maze.height and 0 <= j + dj < self.maze.width:
                 actions.append(action)
             action = rotate_anticlockwise(action)
         return actions
@@ -72,12 +72,15 @@ class ValueIteration(Solver):
         if log_every_step:
             print("==== Iteration 0 ====")
             self.maze.display()
+        if plot_values:
+            self.plotter.add_score(sum(self.maze.get_values()))
+
         for iteration in range(max_iterations):
             delta = 0.0
             # Saves the old value of each state
-            old_values = [tile.value for row in self.maze.layout for tile in row]
-            for i in range(self.m):
-                for j in range(self.n):
+            old_values = self.maze.get_values()
+            for i in range(self.maze.height):
+                for j in range(self.maze.width):
                     tile = self.maze.layout[i][j]
                     if isinstance(tile, Wall):
                         continue
@@ -91,23 +94,33 @@ class ValueIteration(Solver):
                             max_q = value
                             best_action = action
                     self.maze.layout[i][j].action = best_action
-            
-                if log_every_step:
-                    print(f"==== Iteration {iteration + 1} ====")
-                    self.maze.display()
+                    self.maze.layout[i][j].value = max_q
 
-                # Compares the old values of the states with the new value
-                # If the maximum difference is below theta, the policy has converged and
-                # we terminate the evaluation
-                new_values = [tile.value for row in self.maze.layout for tile in row]
-                diffs = [abs(o - n) for o, n in zip(old_values, new_values)]
-                delta = max(diffs)
-                if delta <= theta:
-                    break
+            # Updates the value of each state synchronously
+            self.maze.update_prev_values()
+            
+            if log_every_step:
+                print(f"==== Iteration {iteration + 1} ====")
+                self.maze.display()
+            
+            if plot_values:
+                self.plotter.add_score(sum(self.maze.get_values()))
+
+            # Compares the old values of the states with the new value
+            # If the maximum difference is below theta, the policy has converged and
+            # we terminate the evaluation
+            new_values = self.maze.get_values()
+            diffs = [abs(o - n) for o, n in zip(old_values, new_values)]
+            delta = max(diffs)
+            if delta <= theta:
+                break
         
         if not log_every_step:
             print(f"==== Iteration {iteration + 1} ====")
             self.maze.display()
+        
+        if plot_values:
+            self.plotter.show_plot()
 
 class PolicyIteration(Solver):
     def policy_evaluation(self, theta):
@@ -117,9 +130,9 @@ class PolicyIteration(Solver):
         while True:
             delta = 0.0
             # Saves the old value of each state
-            old_values = [tile.value for row in self.maze.layout for tile in row]
-            for i in range(self.m):
-                for j in range(self.n):
+            old_values = self.maze.get_values()
+            for i in range(self.maze.height):
+                for j in range(self.maze.width):
                     if isinstance(self.maze.layout[i][j], Wall):
                         continue
                     self.maze.layout[i][j].value = self._get_q_value(i, j, self.maze.layout[i][j].action)
@@ -133,9 +146,7 @@ class PolicyIteration(Solver):
                 break
 
         # Updates the value of each state synchronously
-        for i in range(self.m):
-            for j in range(self.n):
-                self.maze.layout[i][j].prev_value = self.maze.layout[i][j].value
+        self.maze.update_prev_values()
 
     def policy_improvement(self):
         '''
@@ -143,8 +154,8 @@ class PolicyIteration(Solver):
         '''
         policy_changed = False
 
-        for i in range(self.m):
-            for j in range(self.n):
+        for i in range(self.maze.height):
+            for j in range(self.maze.width):
                 tile = self.maze.layout[i][j]
                 if isinstance(tile, Wall):
                     continue
@@ -165,10 +176,12 @@ class PolicyIteration(Solver):
         return policy_changed
                         
     def solve(self, theta=0.001, max_iterations=100, log_every_step=True, plot_values=True):
+        print("Running Policy Iteration")
         if log_every_step:
-            print("Running Policy Iteration")
             print("==== Iteration 0 ====")
             self.maze.display()
+        if plot_values:
+            self.plotter.add_score(sum(self.maze.get_values()))
 
         for iteration in range(max_iterations):
             self.policy_evaluation(theta)
@@ -177,6 +190,9 @@ class PolicyIteration(Solver):
             if log_every_step:
                 print(f"==== Iteration {iteration + 1} ====")
                 self.maze.display()
+            
+            if plot_values:
+                self.plotter.add_score(sum(self.maze.get_values()))
 
             if not policy_changed:
                 break
@@ -184,3 +200,6 @@ class PolicyIteration(Solver):
         if not log_every_step:
             print(f"==== Iteration {iteration + 1} ====")
             self.maze.display()
+
+        if plot_values:
+            self.plotter.show_plot()

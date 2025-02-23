@@ -1,6 +1,16 @@
 class Maze:
     def __init__(self, layout):
         self.layout = layout
+        self.height = len(self.layout)
+        self.width = len(self.layout[0])
+
+    def update_prev_values(self):
+        for i in range(self.height):
+            for j in range(self.width):
+                self.layout[i][j].prev_value = self.layout[i][j].value
+
+    def get_values(self):
+        return [tile.value for row in self.layout for tile in row]
     
     def display(self):
         print(f"{'Reward':^{9*len(self.layout[0])}}", end="   ")

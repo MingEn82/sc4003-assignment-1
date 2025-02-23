@@ -9,19 +9,19 @@ class Direction:
     
 class Left(Direction):
     def __init__(self):
-        super().__init__(vector=(-1, 0), icon="←")
+        super().__init__(vector=(0, -1), icon="←")
 
 class Right(Direction):
     def __init__(self):
-        super().__init__(vector=(1, 0), icon="→")
+        super().__init__(vector=(0, 1), icon="→")
 
 class Up(Direction):
     def __init__(self):
-        super().__init__(vector=(0, -1), icon="↑")
+        super().__init__(vector=(-1, 0), icon="↑")
 
 class Down(Direction):
     def __init__(self):
-        super().__init__(vector=(0, 1), icon="↓")
+        super().__init__(vector=(1, 0), icon="↓")
 
 def rotate_clockwise(direction:Direction):
     if type(direction) is Left:

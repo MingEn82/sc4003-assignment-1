@@ -79,20 +79,28 @@ class ValueIteration(Solver):
             delta = 0.0
             # Saves the old value of each state
             old_values = self.maze.get_values()
+
+            # Iterate through each state in the maze
             for i in range(self.maze.height):
                 for j in range(self.maze.width):
                     tile = self.maze.layout[i][j]
+                    # Ignore state if state is a Wall
                     if isinstance(tile, Wall):
                         continue
+
+                    # Only consider actions with intended outcome that moves agent to in-bound state
+                    valid_actions = self._get_valid_actions(i, j)
+
                     # Find best action by calculating Q(s,a) for each action
                     max_q = float('-inf')
-                    valid_actions = self._get_valid_actions(i, j)
                     best_action = valid_actions[0]
                     for action in valid_actions:
                         value = self._get_q_value(i, j, action)
                         if value > max_q:
                             max_q = value
                             best_action = action
+                            
+                    # Updates best action and V(s) for the state
                     self.maze.layout[i][j].action = best_action
                     self.maze.layout[i][j].value = max_q
 

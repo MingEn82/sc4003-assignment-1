@@ -12,6 +12,11 @@ class Maze:
     def get_values(self):
         return [tile.value for row in self.layout for tile in row]
     
+    def reset_values(self):
+        for i in range(self.height):
+            for j in range(self.width):
+                self.layout[i][j].prev_value = self.layout[i][j].value = 0
+
     def display(self):
         print(f"{'Reward':^{9*len(self.layout[0])}}", end="   ")
         print(f"{'Value':^{9*len(self.layout[0])}}", end="   ")

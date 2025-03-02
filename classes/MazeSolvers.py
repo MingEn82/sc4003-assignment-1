@@ -3,13 +3,13 @@ from classes.Tile import Wall
 from classes.Direction import (
     rotate_anticlockwise, rotate_clockwise, Left
 )
-from classes.Plotter import Plotter
+from classes.Plotter import RewardPlotter
 
 class Solver:
     def __init__(self, maze:Maze, discount):
         self.maze = maze
         self.discount = discount
-        self.plotter = Plotter()
+        self.plotter = RewardPlotter()
     
     def _agent_will_move(self, i, j, di, dj):
         '''
@@ -153,8 +153,8 @@ class PolicyIteration(Solver):
             if delta <= theta:
                 break
 
-        # Updates the value of each state synchronously
-        self.maze.update_prev_values()
+            # Updates the value of each state synchronously
+            self.maze.update_prev_values()
 
     def policy_improvement(self):
         '''

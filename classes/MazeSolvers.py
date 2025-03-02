@@ -67,9 +67,9 @@ class Solver:
         return value
 
 class ValueIteration(Solver):
-    def solve(self, max_iterations=100, theta=0.001, log_every_step=True, plot_values=True):
+    def solve(self, max_iterations=1000, theta=0.001, verbose=True, plot_values=True):
         print("Running Value Iteration")
-        if log_every_step:
+        if verbose:
             print("==== Iteration 0 ====")
             self.maze.display()
         if plot_values:
@@ -107,7 +107,7 @@ class ValueIteration(Solver):
             # Updates the value of each state synchronously
             self.maze.update_prev_values()
             
-            if log_every_step:
+            if verbose:
                 print(f"==== Iteration {iteration + 1} ====")
                 self.maze.display()
             
@@ -122,10 +122,6 @@ class ValueIteration(Solver):
             delta = max(diffs)
             if delta <= theta:
                 break
-        
-        if not log_every_step:
-            print(f"==== Iteration {iteration + 1} ====")
-            self.maze.display()
         
         if plot_values:
             self.plotter.show_plot()
@@ -183,9 +179,9 @@ class PolicyIteration(Solver):
         
         return policy_changed
                         
-    def solve(self, theta=0.001, max_iterations=100, log_every_step=True, plot_values=True):
+    def solve(self, theta=0.001, max_iterations=100, verbose=True, plot_values=True):
         print("Running Policy Iteration")
-        if log_every_step:
+        if verbose:
             print("==== Iteration 0 ====")
             self.maze.display()
         if plot_values:
@@ -195,7 +191,7 @@ class PolicyIteration(Solver):
             self.policy_evaluation(theta)
             policy_changed = self.policy_improvement()
 
-            if log_every_step:
+            if verbose:
                 print(f"==== Iteration {iteration + 1} ====")
                 self.maze.display()
             
@@ -204,10 +200,6 @@ class PolicyIteration(Solver):
 
             if not policy_changed:
                 break
-            
-        if not log_every_step:
-            print(f"==== Iteration {iteration + 1} ====")
-            self.maze.display()
 
         if plot_values:
             self.plotter.show_plot()

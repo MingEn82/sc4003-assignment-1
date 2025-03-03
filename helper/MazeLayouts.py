@@ -21,3 +21,19 @@ def get_q1_maze():
             [Square(), Square(), Square(), Square(), Square(), Square()]
         ]
     )
+
+def get_q2_maze():
+    return Maze(
+        [
+            [Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall()],
+            [Wall(), Square(), Square(), Square(), Wall(), Square(), Square(), Square(), Wall(), Square(), Square(), Square(), Square(), Square(), Wall()],
+            [Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall()],
+            [Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall()],
+            [Wall(), Square(), Wall(), Square(), Square(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(1), Wall(), Square(), Wall()],
+            [Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Wall(), Wall(), Square(), Wall()],
+            [Wall(), Square(), Wall(), Square(), Wall(), Square(), Square(), Square(), Square(), Square(), Wall(), Square(), Square(), Square(), Wall()],
+            [Wall(), Square(), Wall(), Square(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Square(), Wall(), Wall(), Wall(), Wall()],
+            [Wall(), Square(), Wall(), Square(), Square(), Square(), Square(), Square(), Square(), Square(), Wall(), Square(), Square(), Square(), Wall()],
+            [Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall()]
+        ]
+    )

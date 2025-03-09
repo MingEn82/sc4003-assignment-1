@@ -2,7 +2,7 @@ from typing import List
 import numpy as np
 from classes.States import State
 from classes.Direction import Direction
-from helper.timeit import timeit
+from classes.Plotters import UtilityPlotter
 
 
 class MDP:
@@ -24,6 +24,8 @@ class MDP:
             [0.0 for _ in range(self.width)]
             for _ in range(self.height)
         ]
+
+        self.utility_plotter = UtilityPlotter()
     
     def _agent_will_move(self, i:int, j:int, di:int, dj:int):
         """
@@ -51,7 +53,6 @@ class MDP:
         Returns:
             float: The expected utilty of taking action a in state s
         '''
-        # Add the reward of the current tile to value
         value = 0
 
         # Add the discounted rewards of current policies to value
@@ -92,6 +93,9 @@ class MDP:
             for j in range(self.width):
                 self.prev_utilities[i][j] = self.utilities[i][j]
 
+    def plot_utilities(self):
+        self.utility_plotter.plot()
+
     # For dev purposes
     def print_utilities(self):
         for i in range(self.height):
@@ -113,7 +117,6 @@ class MDP:
 
 
 class ValueIteration(MDP):
-    @timeit
     def solve(self, error:float):
         """
         Finds the optimum policy and estimated utilities of the MDP
@@ -157,12 +160,16 @@ class ValueIteration(MDP):
             
             # Updates the value of each state synchronously
             self._update_prev_values()
+
+            # Add data to plot
+            self.utility_plotter.add_data(self.utilities, self.layout)
         
             # If delta < theta, the policy has converged and we terminate the evaluation
             if delta < theta:
                 break
                 
-        print(f"Value Iteration took {iteration+1} iterations to converge")
+        print(f"Value Iteration took {iteration} iterations to converge")
+        return iteration
 
 class PolicyIteration(MDP):
     def _get_linear_equation(self, i:int, j:int, action:Direction):
@@ -234,7 +241,6 @@ class PolicyIteration(MDP):
         x, _, _, _ = np.linalg.lstsq(a, b, rcond=None)
         return x.reshape((self.height, self.width))
 
-    @timeit
     def solve(self):
         """
         Finds the optimum policy and estimated utilities of the MDP
@@ -268,10 +274,14 @@ class PolicyIteration(MDP):
                         self.policy[i][j] = best_action
                         unchanged = False
             
+            # Add data to plot
+            self.utility_plotter.add_data(self.utilities, self.layout)
+
             if unchanged:
                 break
         
-        print(f"Policy Iteration took {iteration+1} iterations to converge")
+        print(f"Policy Iteration took {iteration} iterations to converge")
+        return iteration
 
 class ModifiedPolicyIteration(MDP):
     def _policy_evaluation(self, error:float):
@@ -307,7 +317,6 @@ class ModifiedPolicyIteration(MDP):
             if delta < theta:
                 break
     
-    @timeit
     def solve(self, error:float):
         """
         Finds the optimum policy and estimated utilities of the MDP
@@ -344,7 +353,12 @@ class ModifiedPolicyIteration(MDP):
                         self.policy[i][j] = best_action
                         unchanged = False
             
+            # Add data to plot
+            self.utility_plotter.add_data(self.utilities, self.layout)
+
+            # If policy has converged, exit algorithm
             if unchanged:
                 break
         
-        print(f"Modified Policy Iteration took {iteration+1} iterations to converge")
+        print(f"Modified Policy Iteration took {iteration} iterations to converge")
+        return iteration

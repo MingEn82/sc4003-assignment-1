@@ -1,39 +1,16 @@
-from classes.Maze import Maze
-from classes.Tile import Square, Wall
-
-def get_test_maze():
-    return Maze(
-        [
-            [Square(0), Square(0), Square(0), Square(1),],
-            [Square(0), Wall(), Square(0), Square(-1),],
-            [Square(0), Square(0), Square(0), Square(0),],
-        ]
-    )
+from classes.States import State
 
 def get_q1_maze():
-    return Maze(
-        [
-            [Square(1), Wall(), Square(1), Square(), Square(), Square(1)],
-            [Square(), Square(-1), Square(), Square(1), Wall(), Square(-1)],
-            [Square(), Square(), Square(-1), Square(), Square(1), Square()],
-            [Square(), Square(), Square(), Square(-1), Square(), Square(1)],
-            [Square(), Wall(), Wall(), Wall(), Square(-1), Square()],
-            [Square(), Square(), Square(), Square(), Square(), Square()]
-        ]
-    )
+    pos = State(reward=1, is_terminal=True)
+    neg = State(reward=-1, is_terminal=True)
+    reg = State(reward=-0.05)
+    wal = State(reward=0, is_wall=True)
 
-def get_q2_maze():
-    return Maze(
-        [
-            [Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall()],
-            [Wall(), Square(), Square(), Square(), Wall(), Square(), Square(), Square(), Wall(), Square(), Square(), Square(), Square(), Square(), Wall()],
-            [Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall()],
-            [Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall()],
-            [Wall(), Square(), Wall(), Square(), Square(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(1), Wall(), Square(), Wall()],
-            [Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Square(), Wall(), Wall(), Wall(), Square(), Wall()],
-            [Wall(), Square(), Wall(), Square(), Wall(), Square(), Square(), Square(), Square(), Square(), Wall(), Square(), Square(), Square(), Wall()],
-            [Wall(), Square(), Wall(), Square(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Square(), Wall(), Wall(), Wall(), Wall()],
-            [Wall(), Square(), Wall(), Square(), Square(), Square(), Square(), Square(), Square(), Square(), Wall(), Square(), Square(), Square(), Wall()],
-            [Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall()]
-        ]
-    )
+    return [
+        [pos, wal, pos, reg, reg, pos],
+        [reg, neg, reg, pos, wal, neg],
+        [reg, reg, neg, reg, pos, reg],
+        [reg, reg, reg, neg, reg, pos],
+        [reg, wal, wal, wal, neg, reg],
+        [reg, reg, reg, reg, reg, reg]
+    ]

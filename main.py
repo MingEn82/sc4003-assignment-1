@@ -24,7 +24,7 @@ def part_1():
     maze_plotter.draw_action(pi_solver.layout, pi_solver.policy, title="Policy Iteration", font_size=20)
 
     mpi_solver = ModifiedPolicyIteration(q1_maze, discount=0.99)
-    mpi_solver.solve(error=50)
+    mpi_solver.solve(k=50)
     mpi_solver.plot_utilities()
     maze_plotter.draw_estimated_utilities(mpi_solver.layout, mpi_solver.utilities, title="Modified Policy Iteration", font_size=9)
     maze_plotter.draw_action(mpi_solver.layout, mpi_solver.policy, title="Modified Policy Iteration", font_size=20)
@@ -50,7 +50,7 @@ def part_2():
         plotter.add_data("Policy Iteration", s, solver.solve)
 
         solver = ModifiedPolicyIteration(maze, discount=0.99)
-        plotter.add_data("Modified Iteration", s, solver.solve, error=50)
+        plotter.add_data("Modified Iteration", s, solver.solve, k=50)
 
         # Scale cell size down to ensure overall size is the same
         cell_size = cell_size / (s + 3) * s

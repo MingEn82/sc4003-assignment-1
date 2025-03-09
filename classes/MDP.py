@@ -284,16 +284,14 @@ class PolicyIteration(MDP):
         return iteration
 
 class ModifiedPolicyIteration(MDP):
-    def _policy_evaluation(self, error:float):
+    def _policy_evaluation(self, k:int):
         """
         Evaluates the policy approximately to give a reasonably good approximation of the utilities
 
         Args:
-            error (float): The threshold to terminate the approximation
+            k (int): The number of iterations of Bellman update
         """
-        theta = error * (1 - self.discount) / self.discount
-
-        while True:
+        for _ in range(k):
             delta = 0.0
             
             # Iterate through each state in the maze
@@ -312,22 +310,18 @@ class ModifiedPolicyIteration(MDP):
             
             # Updates the value of each state synchronously
             self._update_prev_values()
-        
-            # If delta < theta, the policy has converged and we terminate the evaluation
-            if delta < theta:
-                break
     
-    def solve(self, error:float):
+    def solve(self, k:int):
         """
         Finds the optimum policy and estimated utilities of the MDP
 
         Args:
-            error (float): The threshold to terminate the approximate policy evaluation
+            error (float): The number of iterations of Bellman update for policy evaluation
         """
         iteration = 0
         while True:
             iteration += 1
-            self._policy_evaluation(error)
+            self._policy_evaluation(k)
             unchanged = True
             for i in range(self.height):
                 for j in range(self.width):

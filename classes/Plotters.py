@@ -23,9 +23,9 @@ class UtilityPlotter:
         fig.set_size_inches(18.5, 9.5)
         for label, data in self.data.items():
             ax.plot(data, label=label)
-        plt.xlabel('Iterations')
-        plt.ylabel('Utility Estimates')
-        ax.legend(bbox_to_anchor=(1.05, 1), ncol=2, loc='upper left')
+        plt.xlabel('Iterations', fontsize=20)
+        plt.ylabel('Utility Estimates', fontsize=20)
+        ax.legend(ncol=2, loc='lower right', fontsize=20)
         plt.tight_layout()
         plt.show()
 
@@ -150,9 +150,9 @@ class ComplexityPlotter:
         fig.set_size_inches(18.5, 9.5)
         for label, data in self.times.items():
             ax.plot(self.sizes[label], data, label=label)
-        plt.xlabel('Size of maze')
-        plt.ylabel('Time taken for convergence (s)')
-        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.xlabel('Size of maze', fontsize=20)
+        plt.ylabel('Time taken for convergence (s)', fontsize=20)
+        ax.legend(loc='upper left', fontsize=20)
         plt.tight_layout()
         plt.show()
     
@@ -161,8 +161,8 @@ class ComplexityPlotter:
         fig.set_size_inches(18.5, 9.5)
         for label, data in self.num_iterations.items():
             ax.plot(self.sizes[label], data, label=label)
-        plt.xlabel('Size of maze')
-        plt.ylabel('Log number of iterations for convergence')
-        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.xlabel('Size of maze', fontsize=20)
+        plt.ylabel('Log number of iterations for convergence', fontsize=20)
+        ax.legend(loc='upper left', fontsize=20)
         plt.tight_layout()
         plt.show()

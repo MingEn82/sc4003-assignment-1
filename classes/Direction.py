@@ -14,42 +14,26 @@ class Direction:
     def __str__(self):
         return self.icon
 
-    @classmethod
-    def Left(cls):
-        return cls.LEFT
-
-    @classmethod
-    def Right(cls):
-        return cls.RIGHT
-
-    @classmethod
-    def Up(cls):
-        return cls.UP
-
-    @classmethod
-    def Down(cls):
-        return cls.DOWN
-
     def rotate_clockwise(self):
         if self is Direction.LEFT:
-            return Direction.Up()
+            return Direction.UP
         if self is Direction.UP:
-            return Direction.Right()
+            return Direction.RIGHT
         if self is Direction.RIGHT:
-            return Direction.Down()
+            return Direction.DOWN
         if self is Direction.DOWN:
-            return Direction.Left()
+            return Direction.LEFT
         raise ValueError("Invalid direction for rotation.")
 
     def rotate_anticlockwise(self):
         if self is Direction.LEFT:
-            return Direction.Down()
+            return Direction.DOWN
         if self is Direction.DOWN:
-            return Direction.Right()
+            return Direction.RIGHT
         if self is Direction.RIGHT:
-            return Direction.Up()
+            return Direction.UP
         if self is Direction.UP:
-            return Direction.Left()
+            return Direction.LEFT
         raise ValueError("Invalid direction for rotation.")
 
     def __eq__(self, other):

@@ -50,7 +50,7 @@ def part_2():
         plotter.add_data("Policy Iteration", s, solver.solve)
 
         solver = ModifiedPolicyIteration(maze, discount=0.99)
-        plotter.add_data("Modified Iteration", s, solver.solve, k=50)
+        plotter.add_data("Modified Policy Iteration", s, solver.solve, k=50)
 
         # Scale cell size down to ensure overall size is the same
         cell_size = cell_size / (s + 3) * s
